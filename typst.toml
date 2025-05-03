@@ -14,7 +14,7 @@ repository = "https://github.com/SillyFreak/typst-pull-eh"
 keywords = ["pulley", "rope", "mechanics"]
 categories = ["visualization"]
 disciplines = ["engineering"]
-# compiler = ""
+compiler = "0.13"
 exclude = [
   ".github",
   "docs",
