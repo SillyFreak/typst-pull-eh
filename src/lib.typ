@@ -1,45 +1,40 @@
 #import "math.typ"
 
-#let (cw, ccw) = ("cw", "ccw").map(dir => (dir: dir))
-
-/// normalizes a winding to an array of point and radius. The radius is zero for points, positive
-/// for `"cw"` circles, and negative for `"ccw"` ones.
-///
-/// -> array
-#let normalize(
-  /// a winding - either a point given as an array, or a dictionary containing `c`, `r` and
-  /// `dir` (center, radius, `"cw"`/`"ccw"` direction)
-  /// -> array | dictionary
-  winding,
-) = {
-  import "schemas.typ" as schemas: z
-
-  winding = z.parse(winding, schemas.winding)
-  if type(winding) == array {
-    // a point
-    let c = winding
-    (c, 0)
-  } else {
-    // a circle
-    let (c, r, dir) = winding
-    if dir == "ccw" { r = -r }
-    (c, r)
-  }
-}
+#let (cw, ccw) = ("cw", "ccw").map(dir => (direction: dir))
 
 #let wind(
   ..args,
 ) = {
-  import "schemas.typ" as schemas: z
   import "cetz.typ"
   import cetz.draw: *
 
   let windings = args.pos()
   let style = args.named()
-  windings = z.parse(windings, schemas.windings).map(normalize)
 
-  merge-path(..style, {
+  get-ctx(ctx => merge-path(..style, {
     let prev-angle = none
+    let windings = windings.map(winding => {
+      let coord = winding
+      let radius = 0
+      if type(coord) == dictionary and "radius" in coord and "direction" in coord {
+        radius = coord.remove("radius")
+        let direction = coord.remove("direction")
+        assert(direction in ("cw", "ccw"), message: "direction must be cw or ccw")
+        if direction == "ccw" { radius = -radius }
+        if "coord" in coord {
+          coord = coord.coord
+        }
+      }
+      (coord, radius)
+    })
+
+    let (ctx, ..coords) = cetz.coordinate.resolve(ctx, update: true, ..windings.map(array.first))
+    let windings = windings.zip(coords).map(((winding, coord)) => {
+      assert.eq(coord.last(), 0, message: "only coordinates on the 0 z-plane are supported")
+      _ = coord.remove(2)
+      let radius = winding.last()
+      (coord, radius)
+    })
 
     for ((c1, r1), (c2, r2)) in windings.windows(2) {
       let (p1, p2) = math.tangent(c1, r1, c2, r2)
@@ -83,5 +78,5 @@
         line(p1, p2)
       }
     }
-  })
+  }))
 }

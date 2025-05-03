@@ -20,27 +20,17 @@
     set-style(stroke:  white)
   }
 
-  let pulleys = (
-    point: (0, 9),
-    a: (c: (5, 15), r: 1),
-    b: (c: (5, 12), r: 0.8),
-    c: (c: (5, 9), r: 1),
-    c-point: (5, 10),
-  )
-
-  for p in pulleys.values() {
-    let (c, r) = pull-eh.normalize(p)
-    if r > 0 {
-      circle(c, radius: r)
-    }
-  }
+  let point = (0, 9)
+  circle((5, 15), radius: 1, name: "a")
+  circle((5, 12), radius: 0.8, name: "b")
+  circle((5, 9), radius: 1, name: "c")
 
   wind(
     mark: (start: ">"),
-    pulleys.point,
-    pulleys.a + pull-eh.cw,
-    pulleys.c + pull-eh.cw,
-    pulleys.b + pull-eh.cw,
-    pulleys.c-point,
+    point,
+    (coord: "a", radius: 1) + pull-eh.cw,
+    (coord: "c", radius: 1) + pull-eh.cw,
+    (coord: "b", radius: 0.8) + pull-eh.cw,
+    "c.north",
   )
 })

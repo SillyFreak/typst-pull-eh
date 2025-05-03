@@ -8,65 +8,44 @@
   import cetz.draw: *
   import pull-eh: *
 
-  let pulleys = (
-    point: (0, 9),
-    a: (c: (5, 15), r: 1),
-    b: (c: (5, 12), r: 0.8),
-    c: (c: (5, 9), r: 1),
-    c-point: (5, 10),
-  )
-
-  for p in pulleys.values() {
-    let (c, r) = pull-eh.normalize(p)
-    if r > 0 {
-      circle(c, radius: r, fill: green, stroke: none)
-    }
-  }
+  let circle-style = (fill: green, stroke: none)
+  let point = (0, 9)
+  circle((5, 15), radius: 1, name: "a", ..circle-style)
+  circle((5, 12), radius: 0.8, name: "b", ..circle-style)
+  circle((5, 9), radius: 1, name: "c", ..circle-style)
 
   wind(
     mark: (start: ">"),
-    pulleys.point,
-    pulleys.a + pull-eh.cw,
-    pulleys.c + pull-eh.cw,
-    pulleys.b + pull-eh.cw,
-    pulleys.c-point,
+    point,
+    (coord: "a", radius: 1) + pull-eh.cw,
+    (coord: "c", radius: 1) + pull-eh.cw,
+    (coord: "b", radius: 0.8) + pull-eh.cw,
+    "c.north",
   )
 })
 
 #pagebreak()
 
-
 #cetz.canvas({
   import cetz.draw: *
   import pull-eh: *
 
-  let pulleys = (
-    fix1: (1, 10),
-    fix2: (4, 10),
-    fix3: (7, 10),
-    a: (c: (2, 5), r: 1),
-    b: (c: (4, 8), r: 1),
-    c: (c: (6, 5), r: 1),
-  )
-
-  for p in pulleys.values() {
-    let (c, r) = pull-eh.normalize(p)
-    if r > 0 {
-      circle(c, radius: r, fill: green, stroke: none)
-    }
-  }
+  let circle-style = (fill: green, stroke: none)
+  let fix1 = (1, 10)
+  let fix2 = (4, 10)
+  let fix3 = (7, 10)
+  circle((2, 5), radius: 1, name: "a", ..circle-style)
+  circle((4, 8), radius: 1, name: "b", ..circle-style)
+  circle((6, 5), radius: 1, name: "c", ..circle-style)
 
   line((0, 10), (8, 10))
   wind(
     mark: (start: ">"),
-    pulleys.fix1,
-    pulleys.a + pull-eh.ccw,
-    pulleys.b + pull-eh.cw,
-    pulleys.c + pull-eh.ccw,
-    pulleys.fix3,
+    fix1,
+    (coord: "a", radius: 1) + pull-eh.ccw,
+    (coord: "b", radius: 1) + pull-eh.cw,
+    (coord: "c", radius: 1) + pull-eh.ccw,
+    fix3,
   )
-  wind(
-    pulleys.fix2,
-    pulleys.b.c,
-  )
+  line(fix2, "b.center")
 })

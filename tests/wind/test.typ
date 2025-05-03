@@ -16,16 +16,16 @@
 
   let sketch(tf) = {
     for arg in args.pos() {
-      let (c, r) = {
+      let (coord, radius) = {
         if type(arg) == dictionary { arg }
-        else { (c: arg, r: 0.08) }
+        else { (coord: arg, radius: 0.08) }
       }
-      circle(tf(c), radius: r, fill: green, stroke: none)
+      circle(tf(coord), radius: radius, fill: green, stroke: none)
     }
 
     wind(..args.pos().map(arg => {
       if type(arg) == dictionary {
-        arg.c = tf(arg.c)
+        arg.coord = tf(arg.coord)
         arg
       }
       else {
@@ -51,7 +51,7 @@
   assert(args.pos().len() <= 2)
   let y = args.pos().at(0, default: 0)
   let r = args.pos().at(0, default: 1)
-  (c: (x, y), r: r)
+  (coord: (x, y), radius: r)
 }
 
 #sketches(p(0), p(2))
