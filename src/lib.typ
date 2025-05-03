@@ -38,44 +38,47 @@
   let style = args.named()
   windings = z.parse(windings, schemas.windings).map(normalize)
 
-  let prev-point = none
-  let prev-angle = none
   merge-path(..style, {
+    let prev-angle = none
+
     for ((c1, r1), (c2, r2)) in windings.windows(2) {
       let (p1, p2) = math.tangent(c1, r1, c2, r2)
-      let point = p1 == p2
 
-      let angle = if not point {
+      let angle = if p1 != p2 {
         // the angle can be calculated from the tangent
-        cetz.vector.angle2(p1, p2) - 90deg
+        cetz.vector.angle2(p1, p2)
       } else {
         // the tangent is only a single point; the angle is perpendicular to the line through the
         // centers of the touching circles. The tangent direction depends on the winding direction.
-        cetz.vector.angle2(c1, c2) + if r1 < 0 { 180deg }
+        cetz.vector.angle2(c1, c2) + if r1 < 0 { 90deg } else { -90deg }
       }
 
       if prev-angle != none and r1 != 0 and prev-angle != angle {
         // create an arc segment between two straight line segments
-        arc(
-          c1, anchor: "origin",
-          radius: calc.abs(r1),
-          // TODO I don't understand this, it was just created by trial and error
-          start: {
-            if r1 >= 0 and not prev-point { prev-angle + 180deg }
-            else if r1 < 0 and prev-point { prev-angle - 180deg }
-            else { prev-angle }
-          },
-          stop: {
-            if r1 >= 0 and not point { angle + 180deg }
-            else if r1 < 0 and point { angle - 180deg }
-            else { angle }
-          },
-        )
+
+        // the arc angles are measured from the center. An arc touching a tangent therefore uses
+        // angles normal to the tangent's angle. The direction depends on the winding direction.
+        let start = {
+          if r1 > 0 { prev-angle + 90deg }
+          else { prev-angle - 90deg }
+        }
+        let stop = {
+          if r1 > 0 { angle + 90deg }
+          else { angle - 90deg }
+        }
+        // make sure we are spanning the right side of the circle. Clockwise means angles decrease,
+        // Counter-clockwise means they increase
+        if r1 > 0 and stop > start {
+          stop -= 360deg
+        } else if r1 < 0 and stop < start {
+          stop += 360deg
+        }
+
+        arc(c1, anchor: "origin", radius: calc.abs(r1), start: start, stop: stop)
       }
-      prev-point = point
       prev-angle = angle
 
-      if c2 != none and not point {
+      if p1 != p2 {
         // create a line segment between two arc segments
         line(p1, p2)
       }

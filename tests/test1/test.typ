@@ -19,7 +19,7 @@
   for p in pulleys.values() {
     let (c, r) = pull-eh.normalize(p)
     if r > 0 {
-      circle(c, radius: r)
+      circle(c, radius: r, fill: green, stroke: none)
     }
   }
 
@@ -52,7 +52,7 @@
   for p in pulleys.values() {
     let (c, r) = pull-eh.normalize(p)
     if r > 0 {
-      circle(c, radius: r)
+      circle(c, radius: r, fill: green, stroke: none)
     }
   }
 
