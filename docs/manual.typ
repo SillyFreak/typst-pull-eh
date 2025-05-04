@@ -2,8 +2,7 @@
 #import "/src/lib.typ" as pull-eh
 
 #let package-meta = toml("/typst.toml").package
-#let date = none
-// #let date = datetime(year: ..., month: ..., day: ...)
+#let date = datetime(year: 2025, month: 5, day: 4)
 
 #show: manual(
   title: "pull-eh",

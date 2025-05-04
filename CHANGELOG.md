@@ -26,11 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [0.1.0] - 2025-01-01
+## [0.1.0] - 2025-05-04
 
 ### Added
 
-- ...
+- The `wind()` function for drawing a rope's winding path.
 
 
 [Unreleased]: https://github.com/SillyFreak/typst-pull-eh/compare/v0.1.0...HEAD

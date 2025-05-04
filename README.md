@@ -1,6 +1,7 @@
 # Pull-eh
 
-Visualize pulleys with Typst and CeTZ
+Visualize pulleys with Typst and CeTZ. This package provides a function `wind()` that makes it easy
+to draw a taut rope/cable winding around a number of pulleys or pivot points.
 
 ## Getting Started
 
