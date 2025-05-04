@@ -1,8 +1,66 @@
 #import "math.typ"
 
-#let (cw, ccw) = ("cw", "ccw").map(dir => (direction: dir))
+/// The dictionary ```typc (direction: "cw")``` representing clockwise winding. This can be added to
+/// a dictionary instead of typing out the whole key and value:
+///
+/// ```typc
+/// my-dictionary + cw
+/// // is equivalent to
+/// (..my-dictionary, direction: "cw")
+/// ```
+///
+/// -> dictionary
+#let cw = (direction: "cw")
 
+/// The dictionary ```typc (direction: "ccw")``` representing counter-clockwise winding. This can be
+/// added to a dictionary instead of typing out the whole key and value:
+///
+/// ```typc
+/// my-dictionary + ccw
+/// // is equivalent to
+/// (..my-dictionary, direction: "ccw")
+/// ```
+///
+/// -> dictionary
+#let ccw = (direction: "ccw")
+
+/// Generates a CeTZ path for a rope winding around a number of points and pulleys. Each positional
+/// argument is one winding anchor; named arguments are used to style the path and passed to
+/// #link("https://cetz-package.github.io/docs/api/draw-functions/shapes/merge-path")[`cetz.draw.merge-path()`].
+///
+/// Winding anchors can be specified in one of three ways:
+/// - a dictionary with the `radius`, `direction` and `coord` keys: the `coord` is
+///   #link("https://cetz-package.github.io/docs/api/internal/coordinate#resolve")[resolved]
+///   according to CeTZ's rules and treated as the center of a circle around which the given
+///   `radius`; the rope winds around the circle in the given direction.
+/// - a dictionary with the `radius` and `direction` keys, and any other keys other than `coord`:
+///   the other keys are collectively treated as the `coord`, i.e. the radius and winding direction
+///   are "embedded" into a CeTZ coordinate dictionary. For example,
+///   ```typc (coord: (rel: (2, 2)), radius: 1) + cw``` could be rewritten as
+///   ```typc (rel: (2, 2), radius: 1) + cw```.
+/// - a valid CeTZ coordinate (not necessarily a dictionary): the rope goes directly to the point,
+///   without winding radius or direction.
+///
+/// At least two positional arguments are required. The returned path consists of the following
+/// segments:
+/// - For each pair of adjacent anchors, a straight line segment connecting the two. This line will
+///   either be a direct connection (if both anchors are points) or a circle-line/circle-circle
+///   tangent. Which tangent it is is defined by the winding direction. \
+///   The line segment is omitted if its length would be zero, i.e. the anchors are touching.
+/// - For each anchor except for the first and last, an arc that connects the (potential) line
+///   segments surrounding it. \
+///   The arc is omitted if its angle would be zero, or if the anchor is a point anyway.
+///
+/// By using `cetz.draw.merge-path()`, the styles should apply to the whole path and things such as
+/// dashed strokes should work correctly without looking strange around segment transitions. Due to
+/// the need of resolving coordinates, the returned shape is actually the result of
+/// #link("https://cetz-package.github.io/docs/api/draw-functions/grouping/get-ctx")[`cetz.draw.get-ctx()`].
+///
+/// -> shape
 #let wind(
+  /// positional winding anchors and named CeTZ arguments; see above for details.
+  ///
+  ///  -> arguments
   ..args,
 ) = {
   import "cetz.typ"

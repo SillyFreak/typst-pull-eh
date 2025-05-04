@@ -1,4 +1,4 @@
-#import "@preview/cetz:0.3.4"
+#import "/src/cetz.typ"
 
 #import "/src/lib.typ" as pull-eh
 #import pull-eh: *
