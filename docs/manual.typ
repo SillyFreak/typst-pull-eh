@@ -32,7 +32,7 @@ And the corresponding code:
   code = raw(block: true, lang: "typ", code)
   code = crudo.join(
     crudo.map(```typ
-    #import "@preview/cetz:0.3.4"
+    #import "@preview/cetz:0.4.0"
     #import "PACKAGE"
 
     ```, l => l.replace("PACKAGE", package-import-spec())),
