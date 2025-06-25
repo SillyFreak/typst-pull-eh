@@ -8,8 +8,8 @@ to draw a taut rope/cable winding around a number of pulleys or pivot points.
 To add this package to your project, use this:
 
 ```typ
-#import "@preview/cetz:0.3.4"
-#import "@preview/pull-eh:0.1.0"
+#import "@preview/cetz:0.4.0"
+#import "@preview/pull-eh:0.1.1"
 
 #cetz.canvas(length: 2cm, {
   import cetz.draw: *

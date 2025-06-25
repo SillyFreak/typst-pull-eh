@@ -4,7 +4,7 @@
 #show: manual(
   package-meta: toml("/typst.toml").package,
   subtitle: [Visualize pulleys with Typst and CeTZ],
-  date: datetime(year: 2025, month: 5, day: 4),
+  date: datetime(year: 2025, month: 6, day: 25),
 
   // logo: rect(width: 5cm, height: 5cm),
   // abstract: [
