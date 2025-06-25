@@ -31,8 +31,8 @@
 /// Winding anchors can be specified in one of three ways:
 /// - a dictionary with the `radius`, `direction` and `coord` keys: the `coord` is
 ///   #link("https://cetz-package.github.io/docs/api/internal/coordinate#resolve")[resolved]
-///   according to CeTZ's rules and treated as the center of a circle around which the given
-///   `radius`; the rope winds around the circle in the given direction.
+///   according to CeTZ's rules and treated as the center of a circle with the given `radius`; the
+///   rope winds around the circle in the given direction.
 /// - a dictionary with the `radius` and `direction` keys, and any other keys other than `coord`:
 ///   the other keys are collectively treated as the `coord`, i.e. the radius and winding direction
 ///   are "embedded" into a CeTZ coordinate dictionary. For example,
